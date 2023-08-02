@@ -97,7 +97,6 @@ window.editPost = function(postId , title , text) {
     // console.log()
 }
 
-
 window.save = function(postId) {
     // console.log(postId)
     const updatedTitle = document.querySelector(`#title-${postId}`).value;
