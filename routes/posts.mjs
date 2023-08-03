@@ -75,7 +75,8 @@ router.post('/post', async (req, res, next) => {
         const insertResponse = await col.insertOne({
             id: nanoid(),
             title: req.body.title,
-            text: req.body.text
+            text: req.body.text,
+            // date: ISODate()
         });
         console.log("insertResponse: ", insertResponse);
     
@@ -90,7 +91,7 @@ router.post('/post', async (req, res, next) => {
 
 router.get('/posts', async (req, res, next) => {
 
-    const cursor = col.find({});
+    const cursor = col.find({}).sort({_id:-1});
     let results = await cursor.toArray()
     console.log("results: ", results);
     res.send(results);
@@ -175,11 +176,11 @@ router.delete('/post/:postId', async (req, res, next) => {
     try{
     await col.deleteOne({ _id: new ObjectId(req.params.postId) });
     res.send('Data has been deleted.')
-}catch (err){
+    }catch (err){
 
     res.status(404).send('Error deleting.')
     
-}
+    }
 
     // for (let i = 0; i < posts.length; i++) {
     //     if (posts[i].id === req.params.postId) {
