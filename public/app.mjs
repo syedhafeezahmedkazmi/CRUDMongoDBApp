@@ -31,11 +31,44 @@ document.querySelector('#form1').addEventListener("submit", function (event) {
         title: title,
         text: text
     })
-        .then(function (response) {
+    .then(function (response) {
+            // let postBtn = document.querySelector('#post-btn')
+            
+            // postBtn.addEventListener("click", 
+            // function create () {
+                const popup = document.getElementById("popup");
+                popup.style.display = "block";
+                // const closeButton = document.getElementById("closeButton");
+                
+                // Function to show the popup
+                // function showPopup() {
+                    // Set timeout to hide the popup after 2 seconds (2000 milliseconds)
+                    setTimeout(function () {
+                        popup.style.display = "none";
+                        // hidePopup();
+                        getAllPosts();
+                    }, 2000);
+                    document.querySelector('#title').value = ''
+                    document.querySelector('#text').value = ''
+                    // }
+            
+            // Function to hide the popup
+            // function hidePopup() {
+            // }
+            
+            // Show the popup when needed (for example, after post creation)
+            // showPopup();
+            
+            // Close the popup when the close button is clicked
+            // closeButton.addEventListener("click", function () {
+                //   hidePopup();
+                // });
+            // });
             // const responseData = JSON.parse(response.data)
             // console.log(response);
             // document.querySelector('#displayData').innerHTML = response.data
-            getAllPosts()
+            // getAllPosts()
+            
         })
         .catch(function (error) {
             console.log("err",error);
@@ -44,7 +77,7 @@ document.querySelector('#form1').addEventListener("submit", function (event) {
 })
 
 
-window.getAllPosts = () => {
+    window.getAllPosts = () => {
     axios.get('/api/v1/mongoDB/posts')
         .then(function (response) {
             // console.log(response.data);
@@ -53,11 +86,11 @@ window.getAllPosts = () => {
                 // console.log(eachPost)
                 showPosts +=
                     `
-            <div id="card-${eachPost._id}">  
-            <h3>${eachPost.title}</h3>
-            <p>${eachPost.text}</p>
-            <button onclick="editPost('${eachPost._id}','${eachPost.title}','${eachPost.text}')">Edit</button>
-            <button onclick="delPost('${eachPost._id}')">Delete</button>
+            <div class='post-div' id="card-${eachPost._id}">  
+            <h3 class='post-h3'>${eachPost.title}</h3>
+            <p class='post-p'>${eachPost.text}</p>
+            <button class='post-edit' onclick="editPost('${eachPost._id}','${eachPost.title}','${eachPost.text}')">Edit</button>
+            <button class='post-del' onclick="delPost('${eachPost._id}')">Delete</button>
             </div>
             <br>
              `;
@@ -69,12 +102,11 @@ window.getAllPosts = () => {
             alert("Something went wrong");
         });
 }
-
-
-window.delPost = function (postId) {
-    axios.delete(`api/v1/mongoDB/post/${postId}`)
-    .then(function (response){
-        getAllPosts()
+    
+    window.delPost = function (postId) {
+        axios.delete(`api/v1/mongoDB/post/${postId}`)
+        .then(function (){
+            getAllPosts()
     })
     .catch(function (error){
         console.log(error)
@@ -88,9 +120,9 @@ window.editPost = function(postId , title , text) {
     document.querySelector(`#card-${postId}`).innerHTML = 
     `
     <form onsubmit="save('${postId}')">
-    <label>Title: </label><input type="text" name="" id="title-${postId}" value="${title}"><br>
-    <label>Text: </label><textarea name="" id="text-${postId}" cols="30" rows="10" value="">${text}</textarea><br>
-    <button>Save</button>
+    <label>Title: </label><input class='edit-title' type="text" name="" id="title-${postId}" value="${title}"><br>
+    <label>Text: </label><textarea class='edit-textarea' name="" id="text-${postId}" cols="30" rows="10" value="">${text}</textarea><br>
+    <button class='save'>Save</button>
     </form>
     
     `
@@ -115,4 +147,8 @@ window.save = function(postId) {
     })
 }
 
+
+
+document.addEventListener('DOMContentLoaded', function(){
 getAllPosts()
+})
